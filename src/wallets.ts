@@ -24,11 +24,11 @@ export async function getWalletSolBalance(wallet: Keypair, rpc: string) {
 export async function getWalletTokenBalance(wallet: Keypair, token: string, rpc: string) {
   const connection = new Connection(rpc)
   const tokenAccounts = await connection.getParsedTokenAccountsByOwner(wallet.publicKey, { mint: new PublicKey(token) })
-  const pda = splToken.getAssociatedTokenAddressSync(new PublicKey(token), wallet.publicKey)
-  console.log(await connection.getTokenAccountBalance(pda, 'processed'))
-  let balance = 0
+  // const pda = splToken.getAssociatedTokenAddressSync(new PublicKey(token), wallet.publicKey)
+  // console.log(await connection.getTokenAccountBalance(pda, 'processed'))
+  let balance = 0n
   tokenAccounts.value.forEach((account) => {
-    balance += Number(account.account.data.parsed.info.tokenAmount.amount)
+    balance += BigInt(account.account.data.parsed.info.tokenAmount.amount)
   })
   console.log(`Wallet token balance: ${balance}`)
   return balance
@@ -59,6 +59,6 @@ async function main() {
   await getWalletPdaAccountTokenBalance(wallet, 'AY4x4syaUVouwdHghG8VFsoFf8bDo6kovEiKNUChxXaX', grpcUrl)
 }
 
-main()
-  .then(() => console.log('end'))
-  .catch((err) => console.error(err))
+// main()
+//   .then(() => console.log('end'))
+//   .catch((err) => console.error(err))
